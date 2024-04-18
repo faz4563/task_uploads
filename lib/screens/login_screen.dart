@@ -115,9 +115,11 @@ class _LoginScreenState extends State<LoginScreen> {
                               padding: EdgeInsets.symmetric(
                                   horizontal: 10.w, vertical: 0.h),
                               child: ElevatedButton(
-                                  onPressed: ()  {
+                                  onPressed: emailController.text.isNotEmpty ? (){
+                                     
                                     signIn(context);
-                                  },
+                                   
+                                  }: null,
                                   style: ElevatedButton.styleFrom(
                                       backgroundColor: Colors.redAccent,
                                       shape: RoundedRectangleBorder(
@@ -163,15 +165,20 @@ class _LoginScreenState extends State<LoginScreen> {
   signIn(context) async {
     var token = await AppLoginFirebase.signInWithFirebase(
         emailController, passwordController, auth);
-
-    if (token != "") {
+       
+    if (token != "" && token != null) {
       Navigator.pushReplacement(
           context,
           MaterialPageRoute(
-            builder: (context) =>   HomeScreen(
-              token: token,
+            builder: (context) => HomeScreen(
+              token: token??"",
             ),
           ));
+           ScaffoldMessenger.of(context)
+          .showSnackBar(const SnackBar(content: Text("Logged In Successfully")));
+    } else {
+      ScaffoldMessenger.of(context)
+          .showSnackBar(const SnackBar(content: Text("Invalid Credentials")));
     }
   }
 }

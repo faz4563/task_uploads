@@ -11,6 +11,8 @@ class AppLoginFirebase{
     );
     emailController.clear();
     passwordController.clear();
+ 
+
     return  userCredential.user!.uid;
   } catch (e) {
     if (e is FirebaseAuthException) {
